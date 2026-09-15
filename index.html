@@ -96,7 +96,7 @@
 
             <!-- 訓練家狀態與音效切換 -->
             <div class="flex items-center gap-2">
-                <!-- 訓練家名片 (點擊可編輯) - 等級常駐顯示於右上角 -->
+                <!-- 訓練家名片 (點擊可編輯) -->
                 <div onclick="openTrainerProfileModal(false)" class="flex items-center bg-amber-200 border-2 border-slate-900 rounded-full px-2 py-1 font-bold text-xs gap-1.5 sm:gap-2 shadow-sm cursor-pointer hover:bg-amber-300 transition-colors" title="編輯訓練家資料">
                     <span id="header-trainer-avatar" class="text-base sm:text-lg bg-white rounded-full w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center border border-slate-900 leading-none shrink-0">👦</span>
                     <span id="header-trainer-name" class="hidden sm:inline text-slate-800 font-black truncate max-w-[80px]">小智</span>
@@ -144,7 +144,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- 題型模式 -->
                     <div>
                         <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">🎮 挑戰題型</label>
@@ -159,9 +159,18 @@
 
                     <!-- 課別選擇 -->
                     <div>
-                        <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">📚 選擇練習課別 / 範圍</label>
+                        <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">📚 選擇練習課別</label>
                         <select id="quiz-lesson-filter" class="w-full bg-slate-50 border-2 border-slate-900 rounded-xl p-3 font-bold text-slate-800 focus:ring-2 focus:ring-yellow-400 text-sm">
                             <option value="ALL">全部範圍 (混合練習)</option>
+                        </select>
+                    </div>
+
+                    <!-- 注音特訓下拉清單 -->
+                    <div>
+                        <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">🎯 特定注音特訓 (可選)</label>
+                        <select id="quiz-zhuyin-filter" class="w-full bg-slate-50 border-2 border-slate-900 rounded-xl p-3 font-bold text-slate-800 focus:ring-2 focus:ring-yellow-400 text-sm">
+                            <option value="ALL">無 (綜合練習)</option>
+                            <!-- 選項將透過 JavaScript 動態生成 -->
                         </select>
                     </div>
                 </div>
@@ -244,6 +253,11 @@
                             離開
                         </button>
                     </div>
+                </div>
+
+                <!-- 專項注音標記 (當選定特定注音時顯示) -->
+                <div id="quiz-focus-banner" class="hidden bg-yellow-300 border-2 border-slate-900 rounded-xl py-1.5 px-4 text-center font-black text-slate-900 text-sm flex items-center justify-center gap-2 shadow-sm">
+                    <span>🎯</span> 本次特訓專屬符號：<span id="quiz-focus-symbol" class="text-rose-600 text-xl font-black">ㄅ</span>
                 </div>
 
                 <!-- 題目中央展示區 -->
@@ -374,7 +388,7 @@
                     <div>
                         <h2 class="text-xl font-black text-slate-800">大木博士的注音弱點雷達</h2>
                         <p class="text-xs text-slate-500 font-bold">
-                            精準剖析孩子是「聲母 (ㄓ/ㄗ/ㄅ/ㄉ)」、「介韻母 (ㄣ/ㄥ)」還是「聲調 (二聲/三聲)」容易混淆！
+                            精準剖析孩子是「聲母 (ㄓ/ㄗ/ㄅ/ㄉ)」、「介韻母 (ㄣ/ㄥ)」還是「聲調 (二聲/三聲)」容易混淆！點擊圖鑑即可快速練習！
                         </p>
                     </div>
                 </div>
@@ -385,7 +399,7 @@
                 <div class="poke-card bg-amber-50 p-4 border-slate-900 space-y-3">
                     <h3 class="font-black text-amber-900 text-xs sm:text-sm flex items-center justify-between">
                         <span>🗣️ 聲母常錯排行 (ㄅ~ㄙ)</span>
-                        <span class="text-xs font-bold text-amber-700">錯誤次數</span>
+                        <span class="text-xs font-bold text-amber-700">點擊直接特訓</span>
                     </h3>
                     <div id="weakness-initials-list" class="space-y-1.5 text-xs font-bold"></div>
                 </div>
@@ -411,7 +425,7 @@
             <div class="poke-card bg-white p-5 space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-slate-100 pb-3">
                     <h3 class="font-black text-slate-800 text-base flex items-center gap-2">
-                        <span>📜</span> 37 注音符號戰力總表
+                        <span>📜</span> 37 注音符號戰力總表 <span class="text-xs font-bold text-slate-500">(點擊符號快速練習)</span>
                     </h3>
                     <div class="flex items-center gap-3 text-xs font-bold">
                         <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-emerald-400 border border-slate-800"></span> 熟練 (0錯)</span>
@@ -430,7 +444,7 @@
                         <span>📕</span> 歷史錯題本清單
                     </h3>
                     <button onclick="clearErrorStats()" class="poke-button-sm bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs px-2.5 py-1 rounded-lg">
-                        重設錯題紀錄
+                        全部重設紀錄
                     </button>
                 </div>
                 <div id="error-history-list" class="divide-y divide-slate-100 text-sm font-bold"></div>
@@ -599,6 +613,8 @@
                 <div class="bg-slate-100 p-2.5 rounded-xl border border-slate-300">
                     <span class="text-[11px] font-bold text-slate-500 block mb-1">快速聲調鍵：</span>
                     <div class="flex flex-wrap gap-1.5">
+                        <!-- 新增一聲快速鍵 -->
+                        <button type="button" onclick="insertZhuyinChar('ˉ')" class="poke-button-sm bg-white px-2.5 py-1 rounded text-xs font-bold text-rose-600">ˉ (一聲)</button>
                         <button type="button" onclick="insertZhuyinChar('ˊ')" class="poke-button-sm bg-white px-2.5 py-1 rounded text-xs font-bold text-rose-600">ˊ (二聲)</button>
                         <button type="button" onclick="insertZhuyinChar('ˇ')" class="poke-button-sm bg-white px-2.5 py-1 rounded text-xs font-bold text-rose-600">ˇ (三聲)</button>
                         <button type="button" onclick="insertZhuyinChar('ˋ')" class="poke-button-sm bg-white px-2.5 py-1 rounded text-xs font-bold text-rose-600">ˋ (四聲)</button>
@@ -713,7 +729,7 @@
 
     <!-- ==================== 核心邏輯 JavaScript ==================== -->
     <script>
-        const STORAGE_KEY = 'POKE_ZHUYIN_QUEST_STORAGE_V4';
+        const STORAGE_KEY = 'POKE_ZHUYIN_QUEST_STORAGE_V7'; // 升級版號避免衝突
 
         const ZHUYIN_INITIALS = ['ㄅ','ㄆ','ㄇ','ㄈ','ㄉ','ㄊ','ㄋ','ㄌ','ㄍ','ㄎ','ㄏ','ㄐ','ㄑ','ㄒ','ㄓ','ㄔ','ㄕ','ㄖ','ㄗ','ㄘ','ㄙ'];
         const ZHUYIN_MEDIALS = ['ㄧ','ㄨ','ㄩ'];
@@ -769,20 +785,18 @@
         let currentQuiz = {
             active: false, mode: '', questions: [], currentIndex: 0,
             score: 0, correctCount: 0, wrongCount: 0, mistakesThisSession: [],
-            isRetestMode: false, showHanzi: true, startTime: 0
+            isRetestMode: false, showHanzi: true, startTime: 0,
+            focusedZhuyin: null
         };
 
         let editingWordId = null;
         let tempAvatar = '👦';
-        
-        // --- 新增：全域靜音狀態 ---
         let isMuted = false;
         
         function toggleMute() {
             isMuted = !isMuted;
             document.getElementById('sound-icon').textContent = isMuted ? '🔇' : '🔊';
             
-            // 若切換至靜音，立即停止目前正在播放的語音
             if (isMuted && window.speechSynthesis) {
                 window.speechSynthesis.cancel();
             }
@@ -804,7 +818,7 @@
         };
 
         function playPokeSound(type) {
-            if (isMuted) return; // 若開啟靜音，則不播放音效
+            if (isMuted) return;
             initAudio();
             if (!SFX[type]) return;
             const data = SFX[type];
@@ -855,7 +869,7 @@
         }
 
         async function speakChineseWord(text, customRate = null) {
-            if (!text || isMuted) return false; // 若開啟靜音，則不朗讀
+            if (!text || isMuted) return false;
             initAudio();
             const rate = customRate || appData.settings.ttsRate;
             const pitch = appData.settings.ttsPitch;
@@ -1001,192 +1015,36 @@
             });
         }
 
-        function convertChineseToZhuyin(text) {
-            if (!text) return '';
-            const cleanText = text.trim().replace(/[，,。！？\s]/g, '');
-            if (!cleanText) return '';
-
-            if (EXPANDED_ZHUYIN_DICT[cleanText]) {
-                return EXPANDED_ZHUYIN_DICT[cleanText];
-            }
-
-            const syllables = [];
-            for (let i = 0; i < cleanText.length; i++) {
-                const char = cleanText[i];
-                if (EXPANDED_ZHUYIN_DICT[char]) {
-                    syllables.push(EXPANDED_ZHUYIN_DICT[char]);
-                } else {
-                    syllables.push('？');
-                }
-            }
-            return syllables.join(' ');
-        }
-
-        function autoGuessZhuyin() {
-            const textInput = document.getElementById('input-word-text');
-            const zhuyinInput = document.getElementById('input-word-zhuyin');
-            const text = textInput.value.trim().replace(/[，,。！？\s]/g, '');
+        function populateZhuyinFilterDropdown() {
+            const filter = document.getElementById('quiz-zhuyin-filter');
+            if (filter.options.length > 1) return; // 已經初始化過了
             
-            if (text) {
-                const guessed = convertChineseToZhuyin(text);
-                if (guessed) {
-                    zhuyinInput.value = guessed;
-                }
-            } else {
-                zhuyinInput.value = '';
-            }
-            updateRubyPreview();
-        }
+            const addOpt = (val) => { 
+                const o = document.createElement('option'); 
+                o.value = val; 
+                o.textContent = val; 
+                return o;
+            };
 
-        function autoGenerateZhuyinForInput() {
-            const textInput = document.getElementById('input-word-text');
-            const zhuyinInput = document.getElementById('input-word-zhuyin');
-            const word = textInput.value.trim().replace(/[，,。！？\s]/g, '');
-
-            if (!word) {
-                showPokeDialog('請先輸入國字', '請在上方輸入框輸入中文（例如：學校、春天、拍手、自在）');
-                return;
-            }
-
-            const badge = document.getElementById('zhuyin-match-badge');
-            if (badge) badge.textContent = '🔍 正在檢索最標準注音...';
-
-            const localGuessed = convertChineseToZhuyin(word);
-            if (localGuessed) {
-                zhuyinInput.value = localGuessed;
-                updateRubyPreview();
-                playPokeSound('click');
-            } else {
-                 showPokeDialog('匹配失敗', '無法找到完整的注音，請手動輸入補齊。');
-            }
-        }
-
-        function updateRubyPreview() {
-            const text = document.getElementById('input-word-text').value.trim().replace(/[，,。！？\s]/g, '');
-            const zhuyin = document.getElementById('input-word-zhuyin').value.trim();
-            const preview = document.getElementById('ruby-preview');
-            const badge = document.getElementById('zhuyin-match-badge');
-
-            if (!text) {
-                preview.innerHTML = '<span class="text-slate-400 text-xs font-bold">請輸入國字與注音</span>';
-                if (badge) badge.textContent = '';
-                return;
-            }
-
-            const chars = text.split('');
-            const zparts = zhuyin ? zhuyin.split(/\s+/).filter(Boolean) : [];
-            let html = '';
-            let hasUnknown = false;
-
-            chars.forEach((c, idx) => {
-                const z = zparts[idx] || '';
-                if (z === '？') hasUnknown = true;
-                html += `<ruby>${c}<rt class="${z === '？' || !z ? 'text-amber-500' : 'text-rose-600'}">${z || '？'}</rt></ruby>`;
-            });
-
-            preview.innerHTML = html;
-
-            if (badge) {
-                if (hasUnknown) {
-                     badge.innerHTML = `<span class="text-amber-600 font-black">⚠️ 含有未知注音，請手動修改為正確注音。</span>`;
-                } else if (chars.length === zparts.length) {
-                    badge.innerHTML = `<span class="text-emerald-600 font-black">✅ 國字 ${chars.length} 字 ⇄ 注音 ${zparts.length} 音節 (完全吻合)</span>`;
-                } else if (zparts.length < chars.length) {
-                    badge.innerHTML = `<span class="text-rose-600 font-black">⚠️ 國字 ${chars.length} 字，目前只有 ${zparts.length} 音節（請補齊注音）</span>`;
-                } else {
-                    badge.innerHTML = `<span class="text-amber-600 font-black">ℹ️ 國字 ${chars.length} 字，注音共 ${zparts.length} 音節</span>`;
-                }
-            }
-        }
-
-        function autoGenerateBatchZhuyin() {
-            const area = document.getElementById('batch-input-area');
-            const lines = area.value.split('\n');
-            let converted = [];
-            let count = 0;
-            let missingCount = 0;
-
-            lines.forEach(line => {
-                const clean = line.trim();
-                if (!clean) {
-                    converted.push('');
-                    return;
-                }
-                const parts = clean.split(/[,，]/);
-                const text = parts[0]?.trim();
-                let zhuyin = parts[1]?.trim();
-                const lesson = parts[2]?.trim() || '';
-
-                if (text) {
-                    const textChars = text.replace(/[^\u4e00-\u9fa5]/g, '');
-                    const currentSyllables = zhuyin ? zhuyin.split(/\s+/).filter(Boolean) : [];
-                    
-                    if (!zhuyin || currentSyllables.length !== textChars.length) {
-                        zhuyin = convertChineseToZhuyin(textChars);
-                        if(zhuyin.includes('？')) {
-                            missingCount++;
-                        } else {
-                            count++;
-                        }
-                    }
-                    if (lesson) {
-                        converted.push(`${text},${zhuyin},${lesson}`);
-                    } else {
-                        converted.push(`${text},${zhuyin}`);
-                    }
-                } else {
-                    converted.push(clean);
-                }
-            });
-
-            area.value = converted.join('\n');
-            playPokeSound('click');
+            const grp1 = document.createElement('optgroup'); 
+            grp1.label = '聲母特訓';
+            ZHUYIN_INITIALS.forEach(z => grp1.appendChild(addOpt(z)));
             
-            if (missingCount > 0) {
-                showPokeDialog('自動補齊完成', `已為 ${count} 筆圈詞補齊注音。但有 ${missingCount} 筆含有字典未收錄的生字 (標示為？)，請手動修正後再匯入。`);
-            } else {
-                showPokeDialog('自動補齊完成', `已成功為 ${count} 筆圈詞精準補齊每個國字的完整注音！`);
-            }
-        }
-
-        function parseZhuyin(zhuyinStr) {
-            const syllables = zhuyinStr.trim().split(/\s+/);
-            const initials = [];
-            const finals = [];
-            const tones = [];
-
-            syllables.forEach(s => {
-                let tone = '一聲';
-                if (s.includes('˙')) tone = '輕聲';
-                else if (s.includes('ˊ')) tone = '二聲';
-                else if (s.includes('ˇ')) tone = '三聲';
-                else if (s.includes('ˋ')) tone = '四聲';
-                tones.push(tone);
-
-                const clean = s.replace(/[˙ˊˇˋ]/g, '');
-                for (const char of clean) {
-                    if (ZHUYIN_INITIALS.includes(char)) {
-                        initials.push(char);
-                    } else if (ZHUYIN_MEDIALS.includes(char) || ZHUYIN_FINALS.includes(char)) {
-                        finals.push(char);
-                    }
-                }
-            });
-
-            return { initials, finals, tones };
-        }
-
-        function insertZhuyinChar(char) {
-            const input = document.getElementById('input-word-zhuyin');
-            input.value += char;
-            input.focus();
-            updateRubyPreview();
+            const grp2 = document.createElement('optgroup'); 
+            grp2.label = '介母/韻母特訓';
+            [...ZHUYIN_MEDIALS, ...ZHUYIN_FINALS].forEach(z => grp2.appendChild(addOpt(z)));
+            
+            filter.appendChild(grp1);
+            filter.appendChild(grp2);
         }
 
         function refreshQuizHome() {
             document.getElementById('quiz-setup-card').classList.remove('hidden');
             document.getElementById('quiz-play-card').classList.add('hidden');
             document.getElementById('quiz-summary-card').classList.add('hidden');
+            
+            const focusBanner = document.getElementById('quiz-focus-banner');
+            if(focusBanner) focusBanner.classList.add('hidden');
 
             document.getElementById('stat-total-words').textContent = appData.words.length;
             const wrongWordKeys = Object.keys(appData.stats.wordErrors).filter(w => appData.stats.wordErrors[w] > 0);
@@ -1206,14 +1064,24 @@
             }
 
             const lessons = [...new Set(appData.words.map(w => w.lesson || '第一課'))];
-            const filter = document.getElementById('quiz-lesson-filter');
-            filter.innerHTML = '<option value="ALL">全部範圍 (混合練習)</option>';
+            const lessonFilter = document.getElementById('quiz-lesson-filter');
+            lessonFilter.innerHTML = '<option value="ALL">全部範圍 (混合練習)</option>';
             lessons.forEach(l => {
                 const opt = document.createElement('option');
                 opt.value = l;
-                opt.textContent = `${l} (專注練習)`;
-                filter.appendChild(opt);
+                opt.textContent = `${l}`;
+                lessonFilter.appendChild(opt);
             });
+
+            populateZhuyinFilterDropdown();
+        }
+
+        function jumpToZhuyinPractice(sym) {
+            document.getElementById('quiz-mode-select').value = 'dictation';
+            document.getElementById('quiz-lesson-filter').value = 'ALL';
+            document.getElementById('quiz-zhuyin-filter').value = sym;
+            switchTab('quiz');
+            startQuiz(false);
         }
 
         function startQuiz(isRetest = false) {
@@ -1225,6 +1093,7 @@
 
             const mode = document.getElementById('quiz-mode-select').value;
             const lessonFilter = document.getElementById('quiz-lesson-filter').value;
+            const zhuyinFilter = document.getElementById('quiz-zhuyin-filter').value;
             const countLimit = parseInt(document.getElementById('quiz-count-select').value, 10);
             const hideHanzi = document.getElementById('quiz-hide-hanzi-toggle').checked;
 
@@ -1240,10 +1109,16 @@
                     showPokeDialog('太棒了！', '目前沒有待複習的錯題！');
                     return;
                 }
-            } else if (lessonFilter !== 'ALL') {
-                candidateWords = candidateWords.filter(w => w.lesson === lessonFilter);
+            } else {
+                if (lessonFilter !== 'ALL') {
+                    candidateWords = candidateWords.filter(w => w.lesson === lessonFilter);
+                }
+                if (zhuyinFilter !== 'ALL') {
+                    candidateWords = candidateWords.filter(w => w.zhuyin.includes(zhuyinFilter));
+                }
+                
                 if (candidateWords.length === 0) {
-                    showPokeDialog('無圈詞', `在「${lessonFilter}」中沒有找到圈詞！`);
+                    showPokeDialog('無符合圈詞', '找不到符合條件的圈詞，請調整下拉選單！');
                     return;
                 }
             }
@@ -1275,12 +1150,21 @@
                 mistakesThisSession: [],
                 isRetestMode: isRetest,
                 showHanzi: !hideHanzi,
-                startTime: Date.now() // 開始記錄答題時間
+                startTime: Date.now(),
+                focusedZhuyin: (zhuyinFilter !== 'ALL' && !isRetest) ? zhuyinFilter : null
             };
 
             document.getElementById('quiz-setup-card').classList.add('hidden');
             document.getElementById('quiz-play-card').classList.remove('hidden');
             document.getElementById('quiz-summary-card').classList.add('hidden');
+
+            const focusBanner = document.getElementById('quiz-focus-banner');
+            if (currentQuiz.focusedZhuyin) {
+                focusBanner.classList.remove('hidden');
+                document.getElementById('quiz-focus-symbol').textContent = currentQuiz.focusedZhuyin;
+            } else {
+                focusBanner.classList.add('hidden');
+            }
 
             updateLiveHanziToggleButton();
             renderCurrentQuestion();
@@ -1384,8 +1268,10 @@
                 return;
             }
 
-            const targetZhuyin = q.target.zhuyin.replace(/\s+/g, '');
-            const userAnsNoSpace = userAns.replace(/\s+/g, '');
+            // 【重要核心】：寬容比對邏輯，移除字串中所有的「空白」與「ˉ」(一聲符號)
+            // 這樣無論目標答案或使用者輸入有沒有包含一聲標記，都能準確比對出原本注音符號是否正確
+            const targetZhuyin = q.target.zhuyin.replace(/[\sˉ]/g, '');
+            const userAnsNoSpace = userAns.replace(/[\sˉ]/g, '');
 
             const isCorrect = (userAnsNoSpace === targetZhuyin);
             handleDictationGrading(isCorrect, userAns);
@@ -1408,20 +1294,26 @@
                 container.innerHTML = `
                     <div id="dictation-input-area" class="col-span-full flex flex-col items-center justify-center space-y-3 bg-slate-50 rounded-2xl border-4 border-slate-900 p-4 sm:p-5">
                         <div class="flex justify-between items-center w-full mb-1">
-                            <span class="text-sm sm:text-base font-black text-slate-600">⌨️ 請使用注音鍵盤拼出聽到的字詞（如果是一聲不需要輸入）：</span>
+                            <span class="text-sm sm:text-base font-black text-slate-600">⌨️ 請使用注音鍵盤拼出聽到的字詞：</span>
                             <button onclick="handleVirtualBackspace()" class="poke-button-sm bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1 rounded-lg text-sm font-black flex items-center gap-1">⌫ 刪除</button>
                         </div>
                         
                         <div id="virtual-zhuyin-display" class="w-full bg-white border-4 border-slate-900 rounded-2xl p-3 sm:p-4 mb-2 min-h-[70px] text-3xl sm:text-4xl font-black text-rose-600 tracking-[0.2em] break-all shadow-inner flex items-center flex-wrap"></div>
                         
+                        <!-- 第一聲教學提示卡 -->
+                        <div class="w-full bg-amber-100 border-2 border-amber-300 rounded-xl p-2 text-center text-xs font-black text-amber-900">
+                            💡 提示：第一聲可以按「ˉ」，或是直接不按聲調也可以過關喔！
+                        </div>
+
                         ${kbHtml}
 
-                        <div class="flex gap-1.5 mb-2 w-full">
-                            <button onclick="handleVirtualKeyPress('˙')" class="flex-1 bg-white border-2 border-rose-300 shadow-sm rounded-lg py-2 text-base sm:text-lg font-black text-rose-600 hover:bg-rose-100">˙ 輕聲</button>
-                            <button onclick="handleVirtualKeyPress('ˊ')" class="flex-1 bg-white border-2 border-rose-300 shadow-sm rounded-lg py-2 text-base sm:text-lg font-black text-rose-600 hover:bg-rose-100">ˊ 二聲</button>
-                            <button onclick="handleVirtualKeyPress('ˇ')" class="flex-1 bg-white border-2 border-rose-300 shadow-sm rounded-lg py-2 text-base sm:text-lg font-black text-rose-600 hover:bg-rose-100">ˇ 三聲</button>
-                            <button onclick="handleVirtualKeyPress('ˋ')" class="flex-1 bg-white border-2 border-rose-300 shadow-sm rounded-lg py-2 text-base sm:text-lg font-black text-rose-600 hover:bg-rose-100">ˋ 四聲</button>
-                            <button onclick="handleVirtualKeyPress(' ')" class="flex-1 bg-white border-2 border-slate-300 shadow-sm rounded-lg py-2 text-base sm:text-lg font-black text-slate-600 hover:bg-slate-100">空白</button>
+                        <!-- 新增：明確的一聲按鈕，取代原本的空白鍵 -->
+                        <div class="flex flex-wrap gap-1.5 mb-2 w-full">
+                            <button onclick="handleVirtualKeyPress('ˉ')" class="flex-1 min-w-[60px] bg-white border-2 border-rose-300 shadow-sm rounded-lg py-2 text-base sm:text-lg font-black text-rose-600 hover:bg-rose-100">ˉ 一聲</button>
+                            <button onclick="handleVirtualKeyPress('ˊ')" class="flex-1 min-w-[60px] bg-white border-2 border-rose-300 shadow-sm rounded-lg py-2 text-base sm:text-lg font-black text-rose-600 hover:bg-rose-100">ˊ 二聲</button>
+                            <button onclick="handleVirtualKeyPress('ˇ')" class="flex-1 min-w-[60px] bg-white border-2 border-rose-300 shadow-sm rounded-lg py-2 text-base sm:text-lg font-black text-rose-600 hover:bg-rose-100">ˇ 三聲</button>
+                            <button onclick="handleVirtualKeyPress('ˋ')" class="flex-1 min-w-[60px] bg-white border-2 border-rose-300 shadow-sm rounded-lg py-2 text-base sm:text-lg font-black text-rose-600 hover:bg-rose-100">ˋ 四聲</button>
+                            <button onclick="handleVirtualKeyPress('˙')" class="flex-1 min-w-[60px] bg-white border-2 border-rose-300 shadow-sm rounded-lg py-2 text-base sm:text-lg font-black text-rose-600 hover:bg-rose-100">˙ 輕聲</button>
                         </div>
 
                         <button onclick="checkDictationAnswer()" class="w-full max-w-sm poke-button bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-black py-3 rounded-2xl flex items-center justify-center gap-2 text-lg shadow-md mt-2">
@@ -1612,6 +1504,188 @@
             }
 
             saveToLocalStorage();
+        }
+
+        function convertChineseToZhuyin(text) {
+            if (!text) return '';
+            const cleanText = text.trim().replace(/[，,。！？\s]/g, '');
+            if (!cleanText) return '';
+
+            if (EXPANDED_ZHUYIN_DICT[cleanText]) {
+                return EXPANDED_ZHUYIN_DICT[cleanText];
+            }
+
+            const syllables = [];
+            for (let i = 0; i < cleanText.length; i++) {
+                const char = cleanText[i];
+                if (EXPANDED_ZHUYIN_DICT[char]) {
+                    syllables.push(EXPANDED_ZHUYIN_DICT[char]);
+                } else {
+                    syllables.push('？');
+                }
+            }
+            return syllables.join(' ');
+        }
+
+        function autoGuessZhuyin() {
+            const textInput = document.getElementById('input-word-text');
+            const zhuyinInput = document.getElementById('input-word-zhuyin');
+            const text = textInput.value.trim().replace(/[，,。！？\s]/g, '');
+            
+            if (text) {
+                const guessed = convertChineseToZhuyin(text);
+                if (guessed) {
+                    zhuyinInput.value = guessed;
+                }
+            } else {
+                zhuyinInput.value = '';
+            }
+            updateRubyPreview();
+        }
+
+        function autoGenerateZhuyinForInput() {
+            const textInput = document.getElementById('input-word-text');
+            const zhuyinInput = document.getElementById('input-word-zhuyin');
+            const word = textInput.value.trim().replace(/[，,。！？\s]/g, '');
+
+            if (!word) {
+                showPokeDialog('請先輸入國字', '請在上方輸入框輸入中文（例如：學校、春天、拍手、自在）');
+                return;
+            }
+
+            const badge = document.getElementById('zhuyin-match-badge');
+            if (badge) badge.textContent = '🔍 正在檢索最標準注音...';
+
+            const localGuessed = convertChineseToZhuyin(word);
+            if (localGuessed) {
+                zhuyinInput.value = localGuessed;
+                updateRubyPreview();
+                playPokeSound('click');
+            } else {
+                 showPokeDialog('匹配失敗', '無法找到完整的注音，請手動輸入補齊。');
+            }
+        }
+
+        function updateRubyPreview() {
+            const text = document.getElementById('input-word-text').value.trim().replace(/[，,。！？\s]/g, '');
+            const zhuyin = document.getElementById('input-word-zhuyin').value.trim();
+            const preview = document.getElementById('ruby-preview');
+            const badge = document.getElementById('zhuyin-match-badge');
+
+            if (!text) {
+                preview.innerHTML = '<span class="text-slate-400 text-xs font-bold">請輸入國字與注音</span>';
+                if (badge) badge.textContent = '';
+                return;
+            }
+
+            const chars = text.split('');
+            const zparts = zhuyin ? zhuyin.split(/\s+/).filter(Boolean) : [];
+            let html = '';
+            let hasUnknown = false;
+
+            chars.forEach((c, idx) => {
+                const z = zparts[idx] || '';
+                if (z === '？') hasUnknown = true;
+                html += `<ruby>${c}<rt class="${z === '？' || !z ? 'text-amber-500' : 'text-rose-600'}">${z || '？'}</rt></ruby>`;
+            });
+
+            preview.innerHTML = html;
+
+            if (badge) {
+                if (hasUnknown) {
+                     badge.innerHTML = `<span class="text-amber-600 font-black">⚠️ 含有未知注音，請手動修改為正確注音。</span>`;
+                } else if (chars.length === zparts.length) {
+                    badge.innerHTML = `<span class="text-emerald-600 font-black">✅ 國字 ${chars.length} 字 ⇄ 注音 ${zparts.length} 音節 (完全吻合)</span>`;
+                } else if (zparts.length < chars.length) {
+                    badge.innerHTML = `<span class="text-rose-600 font-black">⚠️ 國字 ${chars.length} 字，目前只有 ${zparts.length} 音節（請補齊注音）</span>`;
+                } else {
+                    badge.innerHTML = `<span class="text-amber-600 font-black">ℹ️ 國字 ${chars.length} 字，注音共 ${zparts.length} 音節</span>`;
+                }
+            }
+        }
+
+        function autoGenerateBatchZhuyin() {
+            const area = document.getElementById('batch-input-area');
+            const lines = area.value.split('\n');
+            let converted = [];
+            let count = 0;
+            let missingCount = 0;
+
+            lines.forEach(line => {
+                const clean = line.trim();
+                if (!clean) {
+                    converted.push('');
+                    return;
+                }
+                const parts = clean.split(/[,，]/);
+                const text = parts[0]?.trim();
+                let zhuyin = parts[1]?.trim();
+                const lesson = parts[2]?.trim() || '';
+
+                if (text) {
+                    const textChars = text.replace(/[^\u4e00-\u9fa5]/g, '');
+                    const currentSyllables = zhuyin ? zhuyin.split(/\s+/).filter(Boolean) : [];
+                    
+                    if (!zhuyin || currentSyllables.length !== textChars.length) {
+                        zhuyin = convertChineseToZhuyin(textChars);
+                        if(zhuyin.includes('？')) {
+                            missingCount++;
+                        } else {
+                            count++;
+                        }
+                    }
+                    if (lesson) {
+                        converted.push(`${text},${zhuyin},${lesson}`);
+                    } else {
+                        converted.push(`${text},${zhuyin}`);
+                    }
+                } else {
+                    converted.push(clean);
+                }
+            });
+
+            area.value = converted.join('\n');
+            playPokeSound('click');
+            
+            if (missingCount > 0) {
+                showPokeDialog('自動補齊完成', `已為 ${count} 筆圈詞補齊注音。但有 ${missingCount} 筆含有字典未收錄的生字 (標示為？)，請手動修正後再匯入。`);
+            } else {
+                showPokeDialog('自動補齊完成', `已成功為 ${count} 筆圈詞精準補齊每個國字的完整注音！`);
+            }
+        }
+
+        function parseZhuyin(zhuyinStr) {
+            const syllables = zhuyinStr.trim().split(/\s+/);
+            const initials = [];
+            const finals = [];
+            const tones = [];
+
+            syllables.forEach(s => {
+                let tone = '一聲';
+                if (s.includes('˙')) tone = '輕聲';
+                else if (s.includes('ˊ')) tone = '二聲';
+                else if (s.includes('ˇ')) tone = '三聲';
+                else if (s.includes('ˋ')) tone = '四聲';
+                tones.push(tone);
+
+                const clean = s.replace(/[˙ˊˇˋˉ]/g, '');
+                for (const char of clean) {
+                    if (ZHUYIN_INITIALS.includes(char)) {
+                        initials.push(char);
+                    } else if (ZHUYIN_MEDIALS.includes(char) || ZHUYIN_FINALS.includes(char)) {
+                        finals.push(char);
+                    }
+                }
+            });
+
+            return { initials, finals, tones };
+        }
+
+        function insertZhuyinChar(char) {
+            const input = document.getElementById('input-word-zhuyin');
+            input.value += char;
+            input.focus();
+            updateRubyPreview();
         }
 
         function renderWordBankTable() {
@@ -1808,6 +1882,27 @@
             showPokeDialog('匯入成功', `成功匯入 ${added} 個圈詞至您的圖鑑庫！`);
         }
 
+        function removeSingleError(wordText) {
+            showConfirmDialog('刪除錯題紀錄', `確定要將「${wordText}」從歷史錯題本中刪除嗎？（不影響原有圖鑑庫）`, () => {
+                const count = appData.stats.wordErrors[wordText] || 0;
+                if (count > 0) {
+                    const originalWord = appData.words.find(w => w.text === wordText);
+                    if (originalWord && originalWord.zhuyin) {
+                        const { initials, finals, tones } = parseZhuyin(originalWord.zhuyin);
+                        initials.forEach(sym => { appData.stats.zhuyinErrors[sym] = Math.max(0, (appData.stats.zhuyinErrors[sym] || 0) - count); });
+                        finals.forEach(sym => { appData.stats.zhuyinErrors[sym] = Math.max(0, (appData.stats.zhuyinErrors[sym] || 0) - count); });
+                        tones.forEach(t => { appData.stats.toneErrors[t] = Math.max(0, (appData.stats.toneErrors[t] || 0) - count); });
+                    }
+                    
+                    delete appData.stats.wordErrors[wordText];
+                    saveToLocalStorage();
+                    renderAnalyticsView();
+                    refreshQuizHome();
+                    playPokeSound('click');
+                }
+            });
+        }
+
         function renderAnalyticsView() {
             const initContainer = document.getElementById('weakness-initials-list');
             initContainer.innerHTML = '';
@@ -1820,7 +1915,7 @@
             } else {
                 initialMistakes.slice(0, 5).forEach(item => {
                     initContainer.innerHTML += `
-                        <div class="flex items-center justify-between bg-white p-2 rounded-xl border border-amber-200">
+                        <div class="flex items-center justify-between bg-white p-2 rounded-xl border border-amber-200 cursor-pointer hover:bg-amber-50" onclick="jumpToZhuyinPractice('${item.sym}')">
                             <span class="text-base font-black text-amber-900">${item.sym}</span>
                             <span class="text-rose-600 font-bold">${item.count} 次錯誤</span>
                         </div>
@@ -1840,7 +1935,7 @@
             } else {
                 finalMistakes.slice(0, 5).forEach(item => {
                     finalContainer.innerHTML += `
-                        <div class="flex items-center justify-between bg-white p-2 rounded-xl border border-sky-200">
+                        <div class="flex items-center justify-between bg-white p-2 rounded-xl border border-sky-200 cursor-pointer hover:bg-sky-50" onclick="jumpToZhuyinPractice('${item.sym}')">
                             <span class="text-base font-black text-sky-900">${item.sym}</span>
                             <span class="text-rose-600 font-bold">${item.count} 次錯誤</span>
                         </div>
@@ -1866,16 +1961,17 @@
 
             all37.forEach(sym => {
                 const err = appData.stats.zhuyinErrors[sym] || 0;
-                let bgClass = 'bg-emerald-100 text-emerald-800 border-emerald-400';
-                if (err >= 3) bgClass = 'bg-rose-200 text-rose-900 border-rose-500 font-black animate-pulse';
-                else if (err >= 1) bgClass = 'bg-amber-200 text-amber-900 border-amber-400';
+                let bgClass = 'bg-emerald-100 text-emerald-800 border-emerald-400 hover:bg-emerald-200 cursor-pointer';
+                if (err >= 3) bgClass = 'bg-rose-200 text-rose-900 border-rose-500 font-black animate-pulse hover:bg-rose-300 cursor-pointer';
+                else if (err >= 1) bgClass = 'bg-amber-200 text-amber-900 border-amber-400 hover:bg-amber-300 cursor-pointer';
 
                 const cell = document.createElement('div');
-                cell.className = `p-2 rounded-xl border-2 font-bold text-center ${bgClass}`;
+                cell.className = `p-2 rounded-xl border-2 font-bold text-center transition-transform hover:scale-105 active:scale-95 ${bgClass}`;
                 cell.innerHTML = `
                     <div class="text-lg">${sym}</div>
                     <div class="text-[10px] opacity-80">${err}錯</div>
                 `;
+                cell.onclick = () => jumpToZhuyinPractice(sym);
                 matrixContainer.appendChild(cell);
             });
 
@@ -1904,6 +2000,9 @@
                             <span class="text-xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-lg">答錯 ${count} 次</span>
                             <button onclick="speakChineseWord('${wordText}')" class="poke-button-sm bg-white hover:bg-slate-100 px-2 py-1 rounded-lg text-xs font-bold">
                                 🔊 聽讀
+                            </button>
+                            <button onclick="removeSingleError('${wordText}')" class="poke-button-sm bg-rose-100 hover:bg-rose-200 px-2 py-1 rounded-lg text-xs font-bold text-rose-700">
+                                🗑️ 刪除
                             </button>
                         </div>
                     `;
