@@ -3133,7 +3133,7 @@
     "ttsEngine": "gemini",
     "localVoiceURI": "中文 台灣",
     "geminiVoice": "Kore",
-    "geminiApiKey": "AQ.Ab8RN6JmA4xNVhkVxxzfQrKJ-XmRJAn8LFKi4c0crzq7lH_heg",
+    "geminiApiKey": "",
     "ttsRate": 1.05,
     "ttsPitch": 1.3,
     "hideHanziInQuiz": true
